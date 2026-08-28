@@ -1,0 +1,32 @@
+# On isleme esikleri. Bu dosya yoksa core/ingest/config.py icindeki
+# varsayilanlar gecerli olur; buradaki her anahtar istege baglidir.
+#
+# Bir kulubun videolari surekli reddediliyorsa kodu degil bu dosyayi degistir.
+
+# --- kabul kapisi
+min_duration_s: 1.0
+max_duration_s: 30.0
+min_width: 480
+min_height: 360
+
+# Bunun altinda kalkis ve inis karesi ayirt edilemez.
+min_fps: 24.0
+# Ret degil uyari: altinda olcum yapilir ama airtime hassasiyeti duser.
+warn_fps_below: 50.0
+
+# 0-255 ortalama parlaklik. Buz beyaz oldugu icin normal bir pist videosu
+# 100'un uzerindedir.
+min_brightness: 40.0
+
+# Ardisik kareler arasi global kaymanin standart sapmasi, piksel.
+max_shake_px: 8.0
+
+# --- normalizasyon
+# target_fps bos: kaynagin kare hizi korunur, video yalnizca sabit kare
+# hizina cevrilir. Buraya sayi yazmak fps dusurur ve kalkis anindaki
+# hassasiyetten goturur.
+target_fps: null
+max_width: 1280
+
+# --- olcum
+quality_sample_frames: 24

@@ -1,0 +1,95 @@
+# Sicrama modulu kurallari.
+#
+# ONEMLI: Esik degerleri BOS. Bunlar gorev 0.4'te antrenorle birlikte doldurulur
+# ve gorev 2.2'de buraya gecirilir. Uydurulmus esik, esik olmamasindan kotudur.
+# Antrenorun bilmedigi hucreyi bos birak: bos hucre "bu metrik bu seviyede
+# degerlendirilmiyor" demektir.
+
+element: jump
+
+phases: [hazirlik, kalkis, ucus, inis, cikis]
+
+metrics:
+  loading_knee_angle_min:
+    phase: hazirlik
+    unit: derece
+    direction: lower_is_better
+    weight:
+    levels:
+      beginner: {}
+      intermediate: {}
+      advanced: {}
+    feedback: {}
+    drill:
+
+  takeoff_torso_lean:
+    phase: kalkis
+    unit: derece
+    direction: lower_is_better
+    weight:
+    levels:
+      beginner: {}
+      intermediate: {}
+      advanced: {}
+    feedback: {}
+    drill:
+
+  airtime:
+    phase: ucus
+    unit: saniye
+    direction: higher_is_better
+    weight:
+    levels:
+      beginner: {}
+      intermediate: {}
+      advanced: {}
+    feedback: {}
+    drill:
+
+  jump_height:
+    phase: ucus
+    unit: metre
+    direction: higher_is_better
+    weight:
+    levels:
+      beginner: {}
+      intermediate: {}
+      advanced: {}
+    feedback: {}
+    drill:
+
+  arm_pullin_delay:
+    phase: ucus
+    unit: saniye
+    direction: lower_is_better
+    weight:
+    levels:
+      beginner: {}
+      intermediate: {}
+      advanced: {}
+    feedback: {}
+    drill:
+
+  landing_knee_angle:
+    phase: inis
+    unit: derece
+    direction: lower_is_better
+    weight:
+    levels:
+      beginner: {}
+      intermediate: {}
+      advanced: {}
+    feedback: {}
+    drill:
+
+  checkout_free_leg_angle:
+    phase: cikis
+    unit: derece
+    direction: higher_is_better
+    weight:
+    levels:
+      beginner: {}
+      intermediate: {}
+      advanced: {}
+    feedback: {}
+    drill:

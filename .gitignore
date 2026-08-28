@@ -1,0 +1,33 @@
+# Veri git'e girmez: sporcu videolari ve antrenor ground truth.
+# KVKK acisindan onemli, ice-skating-coach/.gitignore da ayrica koruyor.
+data/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+build/
+dist/
+
+# Arac onbellekleri
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Model agirliklari
+*.pt
+*.onnx
+
+# Ortam
+.env
+.env.local
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
