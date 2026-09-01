@@ -1,0 +1,26 @@
+# Kisi tespiti, takip ve sporcu secimi ayarlari.
+# Bu dosya yoksa core/pose/config.py icindeki varsayilanlar gecerli olur.
+
+# --- model
+# yolo11n hizli ama hareket bulanikliginda kisiyi kaciriyor; kacirilan kare
+# olculemeyen metrik demek. 30 videoluk sette hiz onemsiz, dogruluk onemli.
+model_path: yolo11m.pt
+tracker: bytetrack.yaml
+# device bos: ultralytics kendisi secer (GPU varsa GPU).
+device: null
+min_detection_confidence: 0.4
+
+# --- sporcu secimi
+# Pistten gecip giden bir patenci birkac karede cok buyuk gorunebilir.
+# Kapsama kapisi olmadan skoru gercek sporcuyu gecer.
+min_coverage: 0.5
+area_weight: 0.6
+centrality_weight: 0.4
+
+# --- kimlik degisimi uyarilari
+# Sporcu sicrarken bile bir karede kendi kutu genisliginin yarisi kadar
+# yatay yol almaz; bundan buyuk kayma kimligin atladigini gosterir.
+max_center_jump_ratio: 0.5
+max_scale_ratio: 1.6
+crowding_iou: 0.3
+max_gap_frames: 3

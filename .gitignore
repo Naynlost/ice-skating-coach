@@ -1,6 +1,9 @@
-# Veri git'e girmez: sporcu videolari ve antrenor ground truth.
-# KVKK acisindan onemli, ice-skating-coach/.gitignore da ayrica koruyor.
-data/
+# Sporcu videolari ve ara ciktilar git'e girmez.
+# Dizin yapisi korunur, icerik girmez: `data/` tek basina yazilsaydi git alt
+# dizinlere hic bakmaz ve .gitkeep dosyalari da disarida kalirdi.
+data/**
+!data/**/
+!data/**/.gitkeep
 
 # Python
 __pycache__/
@@ -18,7 +21,7 @@ dist/
 .coverage
 htmlcov/
 
-# Model agirliklari
+# Model agirliklari (yolo11m.pt ~39 MB, ilk calistirmada kendisi iner)
 *.pt
 *.onnx
 

@@ -9,6 +9,7 @@ bir mp4'e bagli olmadan saniyeler icinde doner.
 
 from __future__ import annotations
 
+from collections.abc import Sequence
 from pathlib import Path
 
 import cv2
@@ -17,6 +18,7 @@ import pytest
 
 from core.ingest.probe import VideoInfo
 from core.ingest.quality import ClipStats
+from core.pose.boxes import BBox, Detection, DetectionSequence, FrameDetections
 from core.schema import (
     NUM_KEYPOINTS,
     ElementInstance,
@@ -179,3 +181,74 @@ def good_video(tmp_path_factory: pytest.TempPathFactory) -> Path:
     """Kabul edilmesi gereken klip: 2 sn, 60 fps, 640x480, aydinlik, sabit."""
     directory = tmp_path_factory.mktemp("videos")
     return write_test_video(directory / "good.mp4", n_frames=120, fps=60.0)
+
+
+# ----------------------------------------------------------- pose yardimcilari
+
+
+def make_bbox(
+    cx: float = 640.0, cy: float = 360.0, width: float = 180.0, height: float = 400.0
+) -> BBox:
+    """Merkez ve boyuttan kutu. Testler kutuyu merkezinden konumlandirmak
+    istiyor; xyxy elle yazmak okunmuyor."""
+    return BBox(
+        x1=cx - width / 2, y1=cy - height / 2, x2=cx + width / 2, y2=cy + height / 2
+    )
+
+
+def make_detection(
+    bbox: BBox | None = None, *, confidence: float = 0.9, track_id: int | None = 1
+) -> Detection:
+    return Detection(bbox=bbox or make_bbox(), confidence=confidence, track_id=track_id)
+
+
+def straight_track(
+    n_frames: int,
+    *,
+    start: tuple[float, float] = (400.0, 360.0),
+    end: tuple[float, float] | None = None,
+    size: tuple[float, float] = (180.0, 400.0),
+) -> list[BBox | None]:
+    """Kare kare duzgun ilerleyen bir kutu dizisi.
+
+    Gercek bir sporcunun kutusu kareler arasinda kucuk adimlarla kayar;
+    kimlik degisimi testleri bu duzgunlugu bilerek bozar.
+    """
+    finish = end or start
+    width, height = size
+    boxes: list[BBox | None] = []
+    for index in range(n_frames):
+        ratio = index / (n_frames - 1) if n_frames > 1 else 0.0
+        cx = start[0] + (finish[0] - start[0]) * ratio
+        cy = start[1] + (finish[1] - start[1]) * ratio
+        boxes.append(make_bbox(cx, cy, width, height))
+    return boxes
+
+
+def make_detection_sequence(
+    tracks: dict[int, Sequence[BBox | None]],
+    *,
+    width: int = 1280,
+    height: int = 720,
+    confidence: float = 0.9,
+) -> DetectionSequence:
+    """Takip kimligi basina kare kare kutulardan bir tespit dizisi kur.
+
+    `None` o karede o takibin gorunmedigi anlamina gelir. Tum listeler ayni
+    uzunlukta olmali; kare indeksi ile liste indeksi birebir eslesiyor.
+    """
+    lengths = {len(boxes) for boxes in tracks.values()}
+    if len(lengths) > 1:
+        msg = f"tum takipler ayni uzunlukta olmali, gelen: {sorted(lengths)}"
+        raise ValueError(msg)
+    n_frames = lengths.pop() if lengths else 0
+
+    frames: list[FrameDetections] = []
+    for index in range(n_frames):
+        detections = tuple(
+            Detection(bbox=boxes[index], confidence=confidence, track_id=track_id)
+            for track_id, boxes in tracks.items()
+            if boxes[index] is not None
+        )
+        frames.append(FrameDetections(frame_index=index, detections=detections))
+    return DetectionSequence(width=width, height=height, frames=tuple(frames))

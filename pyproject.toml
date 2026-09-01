@@ -19,6 +19,9 @@ core = [
 # Gorev 1.4-1.5: tespit, takip, poz
 pose = [
   "ultralytics>=8.3",
+  # ByteTrack'in kimlik atama adimi buna bagli. Acikca yaziyoruz cunku
+  # eksikse ultralytics calisma aninda kendisi kurmaya calisiyor.
+  "lap>=0.5.12",
   "rtmlib>=0.0.13",
   "onnxruntime>=1.17",
 ]
